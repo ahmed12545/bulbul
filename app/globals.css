@@ -1209,6 +1209,67 @@ body {
 }
 
 /* =============================================
+   MOBILE: Hero + Scene + Cards separation
+   ============================================= */
+
+.mobile-scene-section {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .intro-trigger {
+    height: calc(100dvh + 60px);
+    min-height: calc(100dvh + 60px);
+  }
+
+  .intro-container {
+    height: calc(100dvh + 60px);
+    min-height: calc(100dvh + 60px);
+  }
+
+  .layer-hero {
+    height: calc(100dvh + 60px);
+    min-height: calc(100dvh + 60px);
+  }
+
+  .layer-scene {
+    display: none !important;
+  }
+
+  .mobile-scene-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1b75eb;
+    padding: 60px 24px;
+    text-align: center;
+  }
+
+  .mobile-scene-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hiw-section {
+    margin-top: 0;
+    padding-top: 48px;
+  }
+
+  .hiw-steps-container {
+    padding-bottom: 10vh;
+  }
+}
+
+@media (max-width: 600px) {
+  .hiw-section {
+    margin-top: 0;
+    padding-top: 32px;
+  }
+}
+
+/* =============================================
    AUTH PAGES (Login & Signup)
    ============================================= */
 
