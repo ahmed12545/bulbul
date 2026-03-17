@@ -381,6 +381,29 @@ body {
   }
 }
 
+/* Mobile fix for blue void caused by browser chrome resize */
+@media (max-width: 900px) {
+  .intro-trigger {
+    height: calc(100dvh + 60px);
+    min-height: calc(100dvh + 60px);
+  }
+
+  .intro-container {
+    height: calc(100dvh + 60px);
+    min-height: calc(100dvh + 60px);
+  }
+
+  .layer-hero {
+    height: calc(100dvh + 60px);
+    min-height: calc(100dvh + 60px);
+  }
+
+  .layer-scene {
+    height: calc(100dvh + 60px);
+    min-height: calc(100dvh + 60px);
+  }
+}
+
 .hiw-section {
   position: relative;
   background: transparent;
@@ -1804,4 +1827,4 @@ body {
   .auth-title {
     font-size: 1.4rem;
   }
-}
+}  ---- now small steps . a simple one . fix the blue void first and give me the full css code . nothing else
