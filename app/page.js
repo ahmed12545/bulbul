@@ -8,19 +8,16 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 export default function Home() {
   const mainRef = useRef(null);
   const [activeStep, setActiveStep] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMobile(window.innerWidth <= 900);
-  }, []);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     ScrollTrigger.config({ ignoreMobileResize: true });
 
-    const mobile = window.innerWidth <= 900;
-    const sceneScale = mobile ? 22 : 11;
+    const isMobile = window.innerWidth <= 900;
+    const sceneScale = isMobile ? 22 : 11;
     const circleEnd = "circle(0px at 90% 25%)";
+    const scrollEnd = isMobile ? "+=100%" : "+=250%";
+    const scrubSpeed = isMobile ? 0.15 : 0.8;
 
     const ctx = gsap.context(() => {
       const header = document.querySelector(".header");
@@ -48,120 +45,68 @@ export default function Home() {
         gsap.to(buttons, { x: 0, opacity: 1, duration: 0.35, ease: "power2.out" });
       };
 
+      gsap.set(".layer-scene", {
+        scale: sceneScale,
+        rotation: -60,
+        x: "-40vw",
+        y: "25dvh",
+        transformOrigin: "90% 25%",
+        visibility: "visible",
+        opacity: 1,
+      });
+
+      gsap.set(".layer-hero", { clipPath: "circle(150vmax at 50% 50%)", opacity: 1 });
+      gsap.set(".hero-center-wrap", { top: "0", left: "0", scale: 1, rotation: 0, opacity: 1, position: "relative" });
+      gsap.set(".hiw-steps-container", { opacity: 0, y: 40 });
       gsap.set(logo, { x: 0, opacity: 1 });
       gsap.set(buttons, { x: 0, opacity: 1 });
 
-      if (mobile) {
-        // Mobile: simple fade hero, scene title is static, cards below
-        gsap.set(".layer-hero", { opacity: 1 });
-        gsap.set(".hero-center-wrap", { opacity: 1 });
-        gsap.set(".mobile-scene-section", { opacity: 1 });
-        gsap.set(".hiw-steps-container", { opacity: 0, y: 30 });
+      const introTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".intro-trigger",
+          start: "top top",
+          end: scrollEnd,
+          scrub: scrubSpeed,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const p = self.progress;
 
-        const mobileIntro = gsap.timeline({
-          scrollTrigger: {
-            trigger: ".intro-trigger",
-            start: "top top",
-            end: "+=80%",
-            scrub: 0.15,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              const p = self.progress;
-              if (p > 0.1) {
-                header.style.opacity = "0";
-                header.style.visibility = "hidden";
-                header.style.pointerEvents = "none";
-              } else {
-                header.style.opacity = "1";
-                header.style.visibility = "visible";
+            if (p > 0.05 && p < 0.75) {
+              header.style.opacity = "0";
+              header.style.visibility = "hidden";
+              header.style.pointerEvents = "none";
+            } else {
+              header.style.opacity = "1";
+              header.style.visibility = "visible";
+              if (!headerIsHiddenForSection2) {
                 header.style.pointerEvents = "auto";
               }
-            },
-          },
-        });
-
-        mobileIntro.to(".hero-center-wrap", { opacity: 0, scale: 0.85, duration: 0.5, ease: "power2.in" }, 0);
-        mobileIntro.to(".layer-hero", { opacity: 0, duration: 0.5, ease: "power2.in" }, 0.15);
-
-        // Fade in cards when scrolling to them
-        ScrollTrigger.create({
-          trigger: ".hiw-section",
-          start: "top 85%",
-          onEnter: () => {
-            gsap.to(".hiw-steps-container", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
-            header.style.opacity = "1";
-            header.style.visibility = "visible";
-            header.style.pointerEvents = "auto";
-            header.classList.add("header-light");
-          },
-          onLeaveBack: () => {
-            gsap.to(".hiw-steps-container", { opacity: 0, y: 30, duration: 0.3, ease: "power2.in" });
-          },
-        });
-
-      } else {
-        // Desktop: full scroll-driven intro animation
-        gsap.set(".layer-scene", {
-          scale: sceneScale,
-          rotation: -60,
-          x: "-40vw",
-          y: "25dvh",
-          transformOrigin: "90% 25%",
-          visibility: "visible",
-          opacity: 1,
-        });
-
-        gsap.set(".layer-hero", { clipPath: "circle(150vmax at 50% 50%)", opacity: 1 });
-        gsap.set(".hero-center-wrap", { top: "0", left: "0", scale: 1, rotation: 0, opacity: 1, position: "relative" });
-        gsap.set(".hiw-steps-container", { opacity: 0, y: 40 });
-
-        const introTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: ".intro-trigger",
-            start: "top top",
-            end: "+=250%",
-            scrub: 0.8,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              const p = self.progress;
-              if (p > 0.05 && p < 0.75) {
-                header.style.opacity = "0";
-                header.style.visibility = "hidden";
-                header.style.pointerEvents = "none";
+              if (p >= 0.75) {
+                header.classList.add("header-light");
               } else {
-                header.style.opacity = "1";
-                header.style.visibility = "visible";
-                if (!headerIsHiddenForSection2) {
-                  header.style.pointerEvents = "auto";
-                }
-                if (p >= 0.75) {
-                  header.classList.add("header-light");
-                } else {
-                  header.classList.remove("header-light");
-                }
+                header.classList.remove("header-light");
               }
-              if (layerHero) {
-                if (p > 0.2) {
-                  layerHero.style.pointerEvents = "none";
-                } else {
-                  layerHero.style.pointerEvents = "auto";
-                }
-              }
-            },
-          },
-        });
+            }
 
-        introTl.to(".layer-scene", { scale: 1, rotation: 0, x: "0vw", y: "0dvh", duration: 0.5, ease: "none" }, 0);
-        introTl.to(".layer-hero", { clipPath: circleEnd, duration: 0.35, ease: "power1.in" }, 0);
-        introTl.to(".hero-center-wrap", { top: "-25%", left: "40%", scale: 0.3, rotation: 40, duration: 0.3, ease: "power1.in" }, 0);
-        introTl.to(".hero-center-wrap", { opacity: 0, duration: 0.25, ease: "power2.in" }, 0);
-        introTl.to(".layer-hero", { opacity: 0, duration: 0.01, ease: "none" }, 0.35);
-        introTl.to(".hiw-steps-container", { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }, 0.55);
-      }
+            if (layerHero) {
+              if (p > 0.2) {
+                layerHero.style.pointerEvents = "none";
+              } else {
+                layerHero.style.pointerEvents = "auto";
+              }
+            }
+          },
+        },
+      });
+
+      introTl.to(".layer-scene", { scale: 1, rotation: 0, x: "0vw", y: "0dvh", duration: 0.5, ease: "none" }, 0);
+      introTl.to(".layer-hero", { clipPath: circleEnd, duration: 0.35, ease: "power1.in" }, 0);
+      introTl.to(".hero-center-wrap", { top: "-25%", left: "40%", scale: 0.3, rotation: 40, duration: 0.3, ease: "power1.in" }, 0);
+      introTl.to(".hero-center-wrap", { opacity: 0, duration: 0.25, ease: "power2.in" }, 0);
+      introTl.to(".layer-hero", { opacity: 0, duration: 0.01, ease: "none" }, 0.35);
+      introTl.to(".hiw-steps-container", { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }, 0.55);
 
       const hiwRows = gsap.utils.toArray(".hiw-step-row");
       hiwRows.forEach((row, i) => {
@@ -244,7 +189,7 @@ export default function Home() {
   // =============================================
   // CHANGE YOUR NAMES HERE:
   // =============================================
-  const teamMembers = ["Name1", "Name2", "Name3"];
+  const teamMembers = ["DEGHDAG AHMED", "LATRECHE FIRAS", "GUENADEZ IYED"];
   // =============================================
 
   return (
@@ -290,16 +235,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Mobile-only: static scene title between hero and cards */}
-        {isMobile && (
-          <section className="mobile-scene-section">
-            <div className="mobile-scene-content">
-              <div className="scene-label">How Bulbul Works</div>
-              <h2 className="scene-title">5 steps to fluency</h2>
-            </div>
-          </section>
-        )}
 
         <section className="hiw-section">
           <div className="hiw-bg-lines">
