@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Learning Section</title>
+<style>
+    /* Reset and base styles */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: #f4f4f4; /* Just for contrast against the section */
+    }
+
+    /* Variables for colors */
+    :root {
+        --primary-blue: #1b75eb;
+        --dark-blue: #125bb8;
+        --card-inactive: rgba(255, 255, 255, 0.15);
+        --text-white: #ffffff;
+    }
+
+    /* Main Section Container */
+    .hero-section {
+        background-color: var(--primary-blue);
+        color: var(--text-white);
+        padding: 60px 20px;
+        position: relative;
+        overflow: hidden;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 2; /* Keep content above background graphic */
+        width: 100%;
+    }
+
+    /* Left Column */
+    .left-column {
+        flex: 1;
+        min-width: 300px;
+        padding-right: 40px;
+    }
+
+    .main-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 40px;
+        letter-spacing: -1px;
+    }
+
+    /* Feature Cards */
+    .feature-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 450px;
+    }
+
+    .feature-card {
+        background-color: var(--card-inactive);
+        border-radius: 40px;
+        padding: 25px 30px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .feature-card.active {
+        background-color: var(--text-white);
+        color: var(--primary-blue);
+    }
+
+    .feature-card h3 {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .feature-card p {
+        font-size: 1rem;
+        line-height: 1.4;
+        opacity: 0.9;
+    }
+
+    .feature-card.active p {
+        color: #555; /* Slightly darker text for subtitle on white background */
+    }
+
+    /* Right Column */
+    .right-column {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        position: relative;
+    }
+
+    /* Awards Section */
+    .awards-container {
+        display: flex;
+        gap: 40px;
+        margin-top: 20px;
+        margin-right: 50px;
+    }
+
+    .award {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .laurel {
+        width: 24px;
+        height: auto;
+        fill: var(--text-white);
+    }
+
+    .award-details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .award-icon {
+        width: 24px;
+        height: 24px;
+        fill: var(--text-white);
+        margin-bottom: 5px;
+    }
+
+    .award-title {
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    .award-subtitle {
+        font-size: 0.75rem;
+        opacity: 0.8;
+    }
+
+    /* Background Graphic (Starburst) */
+    .bg-graphic {
+        position: absolute;
+        bottom: -150px;
+        right: -100px;
+        width: 800px;
+        height: 800px;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .container {
+            flex-direction: column;
+        }
+        .left-column {
+            padding-right: 0;
+            margin-bottom: 50px;
+        }
+        .main-title {
+            font-size: 2.5rem;
+            text-align: center;
+        }
+        .feature-list {
+            margin: 0 auto;
+        }
+        .right-column {
+            align-items: center;
+        }
+        .awards-container {
+            margin-right: 0;
+        }
+        .bg-graphic {
+            right: -200px;
+            bottom: -200px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<section class="hero-section">
+    
+    <!-- Background Starburst SVG -->
+    <svg class="bg-graphic" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+        <path fill="var(--dark-blue)" d="M250,500 L200,380 L60,400 L130,280 L20,180 L160,160 L200,30 L280,130 L420,80 L360,200 L490,280 L350,330 L380,460 Z" />
+    </svg>
+
+    <div class="container">
+        
+        <!-- Left Side: Text and Cards -->
+        <div class="left-column">
+            <h1 class="main-title">Why learn a language<br>with Busuu?</h1>
+            
+            <div class="feature-list">
+                <!-- Card 1 (Active) -->
+                <div class="feature-card active">
+                    <h3>Expert-designed lessons</h3>
+                    <p>Structured to build complete language skills</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="feature-card">
+                    <h3>Build speaking confidence</h3>
+                    <p>Get fluent with pronunciation and conversation practice.</p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="feature-card">
+                    <h3>Track your progress</h3>
+                    <p>Strengthen grammar and vocabulary with guided practice.</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="feature-card">
+                    <h3>Connect with our Community</h3>
+                    <p>Learn the everyday language you need from fluent speakers.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Awards -->
+        <div class="right-column">
+            <div class="awards-container">
+                
+                <!-- Google Play Award -->
+                <div class="award">
+                    <!-- Left Laurel -->
+                    <svg class="laurel" viewBox="0 0 24 60"><path d="M20,10 Q10,20 12,30 Q5,40 10,50 Q15,45 18,35 Q22,25 20,10 Z M18,5 Q8,15 10,25 Q3,35 8,45 Z" fill="currentColor"/></svg>
+                    
+                    <div class="award-details">
+                        <!-- Play Icon -->
+                        <svg class="award-icon" viewBox="0 0 24 24"><path d="M5,3 L19,12 L5,21 Z" fill="currentColor"/></svg>
+                        <span class="award-title">Editor's Choice</span>
+                        <span class="award-subtitle">Google Play</span>
+                    </div>
+
+                    <!-- Right Laurel -->
+                    <svg class="laurel" viewBox="0 0 24 60" style="transform: scaleX(-1);"><path d="M20,10 Q10,20 12,30 Q5,40 10,50 Q15,45 18,35 Q22,25 20,10 Z M18,5 Q8,15 10,25 Q3,35 8,45 Z" fill="currentColor"/></svg>
+                </div>
+
+                <!-- App Store Award -->
+                <div class="award">
+                    <!-- Left Laurel -->
+                    <svg class="laurel" viewBox="0 0 24 60"><path d="M20,10 Q10,20 12,30 Q5,40 10,50 Q15,45 18,35 Q22,25 20,10 Z M18,5 Q8,15 10,25 Q3,35 8,45 Z" fill="currentColor"/></svg>
+                    
+                    <div class="award-details">
+                        <!-- Apple Icon -->
+                        <svg class="award-icon" viewBox="0 0 24 24"><path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM15.5 18C14.3 18 13.5 17.5 12 17.5C10.5 17.5 9.7 18 8.5 18C6.5 18 3 14 3 9.5C3 6.5 5 4.5 7.5 4.5C8.8 4.5 9.8 5.2 10.5 5.5C11.2 5.2 12.2 4.5 13.5 4.5C16 4.5 18 6.5 18 9.5C18 14 17.5 18 15.5 18Z" fill="currentColor"/></svg>
+                        <span class="award-title">App of the Year</span>
+                        <span class="award-subtitle">App Store</span>
+                    </div>
+
+                    <!-- Right Laurel -->
+                    <svg class="laurel" viewBox="0 0 24 60" style="transform: scaleX(-1);"><path d="M20,10 Q10,20 12,30 Q5,40 10,50 Q15,45 18,35 Q22,25 20,10 Z M18,5 Q8,15 10,25 Q3,35 8,45 Z" fill="currentColor"/></svg>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>
