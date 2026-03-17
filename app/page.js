@@ -45,6 +45,7 @@ export default function Home() {
         gsap.to(buttons, { x: 0, opacity: 1, duration: 0.35, ease: "power2.out" });
       };
 
+      // Scene layer: zoomed in, will zoom out to reveal
       gsap.set(".layer-scene", {
         scale: sceneScale,
         rotation: -60,
@@ -55,12 +56,17 @@ export default function Home() {
         opacity: 1,
       });
 
+      // Scene text: hidden on mobile, visible on desktop
+      if (isMobile) {
+        gsap.set(".scene-content", { opacity: 0 });
+      }
+
       gsap.set(".layer-hero", { clipPath: "circle(150vmax at 50% 50%)", opacity: 1 });
       gsap.set(".hero-center-wrap", { top: "0", left: "0", scale: 1, rotation: 0, opacity: 1, position: "relative" });
-      gsap.set(".hiw-steps-container", { opacity: 0, y: 40 });
       gsap.set(logo, { x: 0, opacity: 1 });
       gsap.set(buttons, { x: 0, opacity: 1 });
 
+      // Intro timeline: hero shrinks, scene zooms out
       const introTl = gsap.timeline({
         scrollTrigger: {
           trigger: ".intro-trigger",
@@ -101,12 +107,38 @@ export default function Home() {
         },
       });
 
+      // Scene background zooms out and unrotates
       introTl.to(".layer-scene", { scale: 1, rotation: 0, x: "0vw", y: "0dvh", duration: 0.5, ease: "none" }, 0);
-      introTl.to(".layer-hero", { clipPath: circleEnd, duration: 0.35, ease: "power1.in" }, 0);
-      introTl.to(".hero-center-wrap", { top: "-25%", left: "40%", scale: 0.3, rotation: 40, duration: 0.3, ease: "power1.in" }, 0);
-      introTl.to(".hero-center-wrap", { opacity: 0, duration: 0.25, ease: "power2.in" }, 0);
-      introTl.to(".layer-hero", { opacity: 0, duration: 0.01, ease: "none" }, 0.35);
-      introTl.to(".hiw-steps-container", { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }, 0.55);
+
+      if (isMobile) {
+        // Mobile: hero fades out, no clip-path
+        introTl.to(".hero-center-wrap", { opacity: 0, duration: 0.25, ease: "power2.in" }, 0);
+        introTl.to(".layer-hero", { opacity: 0, duration: 0.3, ease: "power2.in" }, 0.1);
+
+        // Scene text fades in then out
+        introTl.to(".scene-content", { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.35);
+        introTl.to(".scene-content", { opacity: 0, duration: 0.15, ease: "power2.in" }, 0.6);
+      } else {
+        // Desktop: full clip-path + rotation + scale animation
+        introTl.to(".layer-hero", { clipPath: circleEnd, duration: 0.35, ease: "power1.in" }, 0);
+        introTl.to(".hero-center-wrap", { top: "-25%", left: "40%", scale: 0.3, rotation: 40, duration: 0.3, ease: "power1.in" }, 0);
+        introTl.to(".hero-center-wrap", { opacity: 0, duration: 0.25, ease: "power2.in" }, 0);
+        introTl.to(".layer-hero", { opacity: 0, duration: 0.01, ease: "none" }, 0.35);
+      }
+
+      // Cards section: fade in with scroll
+      gsap.set(".hiw-steps-container", { opacity: 0, y: 40 });
+
+      ScrollTrigger.create({
+        trigger: ".hiw-section",
+        start: "top 80%",
+        onEnter: () => {
+          gsap.to(".hiw-steps-container", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+        },
+        onLeaveBack: () => {
+          gsap.to(".hiw-steps-container", { opacity: 0, y: 40, duration: 0.3, ease: "power2.in" });
+        },
+      });
 
       const hiwRows = gsap.utils.toArray(".hiw-step-row");
       hiwRows.forEach((row, i) => {
@@ -186,11 +218,7 @@ export default function Home() {
     { title: "Track & Level Up", desc: "Watch your progress with detailed stats, streaks, and achievements." },
   ];
 
-  // =============================================
-  // CHANGE YOUR NAMES HERE:
-  // =============================================
   const teamMembers = ["DEGHDAG AHMED", "LATRECHE FIRAS", "GUENADEZ IYED"];
-  // =============================================
 
   return (
     <div ref={mainRef}>
@@ -207,6 +235,7 @@ export default function Home() {
       </header>
 
       <div className="brand-bg-wrapper">
+        {/* Intro: hero + scene (pinned, animated) */}
         <section className="intro-trigger">
           <div className="intro-container">
             <div className="layer-scene">
@@ -236,6 +265,7 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Cards section: completely separate, normal flow */}
         <section className="hiw-section">
           <div className="hiw-bg-lines">
             <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1440 600">
